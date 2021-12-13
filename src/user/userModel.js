@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-const User = mongoose.model("User", userSchema);//capital letter used, as it is the name we are using for calling our Schema
+const User = mongoose.model("User", userSchema);
+//capital letter used, as it is the model name we are using for calling our Schema
 
 module.exports = User; 
