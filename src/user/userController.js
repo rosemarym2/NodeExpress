@@ -24,10 +24,10 @@ exports.listUsers = async(req, res) =>{
 exports.updateUsers = async (req, res) => {
     try {
         const user = await User.findById(req.body._id);
-        console.log(await User.findByIdAndUpdate(req.body._id, req.body,),
+        console.log(await User.findByIdAndUpdate(req.body._id, req.body),
          {upsert: true, new: true, runValidators: true});
-            //put method used- which updates the entire object, whereas patch just updates part of the object
-            res.status(200).send({message: "Successfully Updated User", user});
+            //put method used, which updates the entire object, whereas patch just updates part of the object
+            res.status(200).send({message: "Successfully Updated User", user, upsert: true, new: true});
     } catch (error) {
         console.log(error)
     } 
