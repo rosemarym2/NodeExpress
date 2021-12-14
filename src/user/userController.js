@@ -8,6 +8,7 @@ exports.addUser = async(req, res) =>{
         //200 status code stands for everything is okay
     } catch (error){
         console.log(error);
+        res.status(500).send({message: "Unsuccessful, please try again"});
     }
 };
 
@@ -23,8 +24,8 @@ exports.listUsers = async(req, res) =>{
 exports.updateUsers = async (req, res) => {
     try {
         const user = await User.findById(req.body._id);
-        console.log(await User.findByIdAndUpdate({_id: body._id}, (req.body),
-            {upsert: true, new: true, runValidators: true}))
+        console.log(await User.findByIdAndUpdate(req.body._id, req.body,),
+         {upsert: true, new: true, runValidators: true});
             //put method used- which updates the entire object, whereas patch just updates part of the object
             res.status(200).send({message: "Successfully Updated User", user});
     } catch (error) {
@@ -39,6 +40,5 @@ exports.deleteUsers = async (req, res) => {
         res.status(200).send({message: "Successfully Deleted User", user});
     } catch (error) {
         console.log(error)
-        res.status(500).send ({message: "Unsuccessful, please try again"});
     } 
 };
