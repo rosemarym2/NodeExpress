@@ -13,13 +13,30 @@ exports.hashPassword = async (req, res, next) =>{
 
 exports.passwordMatch = async (req, res) =>{
     try {
-        const userEmail = await User.findOne(req.body.email);//fetching the email from db to match encrypted password to
-        const match = await bcrypt.compare(password, userEmail.password); //comparing the password with new encrypted password res== true or res == false
+        const userEmail = await User.findOne({ email: req.body.email, username: req.body.username });
+        //fetching the email and username from db to match encrypted password to
+        const match = await bcrypt.compare(req.body.password, userEmail.password); 
+        //comparing the password with new encrypted password res == true or res == false
         if (match) {
-            res.status(200).send({message: "Successful log in"});
+            res.status(200).send({message: `Successful log in, hello ${req.body.username}`});
         } else {
-            console.log(error);
-            res.send("Username or Password Unknown");
+            res.status(500).send({message: "Username or Password Unknown"});
+        }
+    } catch (error){
+        console.log(error);
+        res.status(500).send ({message: "Unsuccessful, no match found"});
+    }
+}
+
+exports.validEmail = async (req, res) =>{
+    try {
+        const regex = /.+\@.+\..+/; //string email pattern 
+        if (regex.test(req.body.email)) {
+            res.status(200).send({message: `${req.body.email} is a valid email`});
+            //testing that the string email pattern is matching to various tokens found in a commonly formatted email address 
+        } else {
+            res.status(400).send({message: `${req.body.email} is not a valid email`});
+            //http 400 = Bad Request, the client should not repeat this request without modification
         }
     } catch (error){
         console.log(error);
